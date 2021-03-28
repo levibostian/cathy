@@ -1,7 +1,7 @@
 {
-  "name": "@levibostian/npm-module-blanky",
+  "name": "cathy",
   "version": "0.1.0",
-  "description": "replace me",
+  "description": "npm module to make comments on GitHub pull requests",
   "scripts": {
     "test": "npx jest",
     "format": "npx prettier --write \"{app,tests}/**/*.ts\"",
@@ -12,17 +12,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/levibostian/npm-module-blanky.git"
+    "url": "https://github.com/levibostian/cathy.git"
   },
   "keywords": [
     "boilerplate"
   ],
-  "author": "Levi Bostian <levi.bostian@gmail.com>",
+  "author": "Levi Bostian <levi@levi.earth>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/levibostian/npm-module-blanky/issues"
+    "url": "https://github.com/levibostian/cathy/issues"
   },
-  "homepage": "https://github.com/levibostian/npm-module-blanky#readme",
+  "homepage": "https://github.com/levibostian/cathy#readme",
   "publishConfig": {
     "access": "public"
   },
