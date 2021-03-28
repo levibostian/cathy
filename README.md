@@ -13,6 +13,45 @@ npm module to make comments on GitHub pull requests.
 # Goals of this project
 
 - Zero dependencies. This module is meant to be a dependency of your projects like GitHub Actions. Be small for quick install and security reasons. 
+- Typescript and Javascript support with officially supported Typescript bindings.
+
+# Getting started
+
+* Install module in project:
+
+```
+npm install --save cathy
+```
+
+* Authenticate with GitHub with a personal access token:
+
+```ts
+import cathy from "cathy"
+
+cathy.warmup({
+  githubToken: 'XXXXXXXXXXXXXX'
+})
+```
+
+* Time to make a comment! 
+
+```ts
+// This is the shorthand way to make a comment using the default options. 
+cathy.speak('### 👋 Hello! 👋')
+```
+
+...or...use some of the options:
+
+```ts
+// Here are all of the function options that you may provide. 
+// Note: Option values below are the defaults. 
+cathy.speak('### 👋 Hello! 👋', {
+  // Update existing comment you have sent on this pull request
+  updateExisting: false,
+  // Identifier used for updating a comment. Cathy updates the existing comment with the provided ID. 
+  updateID: 'default'
+})
+```
 
 ## Contributors
 
