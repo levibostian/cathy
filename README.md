@@ -1,34 +1,18 @@
-[npm]: https://www.npmjs.com/package/levibostian/npm-module-blanky
+[npm]: https://www.npmjs.com/package/levibostian/cathy
 
-Latest (recommended) [![npm latest version](https://img.shields.io/npm/v/levibostian/npm-module-blanky/latest.svg)][npm]
-Beta: [![npm beta version](https://img.shields.io/npm/v/levibostian/npm-module-blanky/beta.svg)][npm]
-Alpha: [![npm alpha version](https://img.shields.io/npm/v/levibostian/npm-module-blanky/alpha.svg)][npm]
+Latest (recommended) [![npm latest version](https://img.shields.io/npm/v/levibostian/cathy/latest.svg)][npm]
+Beta: [![npm beta version](https://img.shields.io/npm/v/levibostian/cathy/beta.svg)][npm]
+Alpha: [![npm alpha version](https://img.shields.io/npm/v/levibostian/cathy/alpha.svg)][npm]
 
-[![codecov](https://codecov.io/gh/levibostian/npm-module-blanky/branch/main/graph/badge.svg?token=XXXXXXX)](https://codecov.io/gh/levibostian/npm-module-blanky)
+[![codecov](https://codecov.io/gh/levibostian/cathy/branch/main/graph/badge.svg?token=BuKNhLezPs)](https://codecov.io/gh/levibostian/cathy)
 
-# npm-module-blanky
+# cathy
 
-Opinionated boilerplate used to make and deploy npm modules.
+npm module to make comments on GitHub pull requests. 
 
 # Goals of this project
 
-- Contain configuration files to setup all tools I tend to use in my development flow.
-- Clone, rename some files, and get developing!
-- Start with zero dependencies. I try my best to keep all npm modules as slim as possible.
-- Setup with continuous delivery to npmjs.com.
-- Publish source maps and Typescript type declarations.
-
-# Getting started
-
-- Enable GitHub Actions for your repository.
-- If you have not done so already, create a GitHub account for bot purposes.
-- Add your bot account in the repository `/settings/access`.
-- Create secrets in GitHub settings:
-  - `BOT_PUSH_TOKEN` with key being a GitHub personal access token with push permission so the bot can push to the repository (the bot will be making git tags and releases on repository).
-  - `CODECOV_TOKEN` with upload token for CodeCov project to upload test coverage report to codecov.
-- Edit the codecov badge at the top of this file. Find the token for the badge at `https://app.codecov.io/gh/<github-username>/<name-repo>/settings/badge`
-- Project is setup for public publishing by default. If you would like to make your module private, edit `publishConfig` in `package.json`.
-- Delete `CHANGELOG.md` to reset it.
+- Zero dependencies. This module is meant to be a dependency of your projects like GitHub Actions. Be small for quick install and security reasons. 
 
 ## Contributors
 
@@ -39,7 +23,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/levibostian"><img src="https://avatars1.githubusercontent.com/u/2041082?v=4" width="100px;" alt=""/><br /><sub><b>Levi Bostian</b></sub></a><br /><a href="https://github.com/levibostian/npm-module-blanky/commits?author=levibostian" title="Code">💻</a> <a href="https://github.com/levibostian/npm-module-blanky/commits?author=levibostian" title="Documentation">📖</a> <a href="#maintenance-levibostian" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/levibostian"><img src="https://avatars1.githubusercontent.com/u/2041082?v=4" width="100px;" alt=""/><br /><sub><b>Levi Bostian</b></sub></a><br /><a href="https://github.com/levibostian/cathy/commits?author=levibostian" title="Code">💻</a> <a href="https://github.com/levibostian/cathy/commits?author=levibostian" title="Documentation">📖</a> <a href="#maintenance-levibostian" title="Maintenance">🚧</a></td>
   </tr>
 </table>
 
@@ -47,3 +31,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+# Credits 
+
+* Thank you to [this project](https://github.com/marocchino/sticky-pull-request-comment) for the inspiration behind this project. I loved the project, but wanted to add the functionality to my own GitHub Actions which was the original inspiration of this project. 
