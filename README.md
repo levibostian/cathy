@@ -4,52 +4,49 @@ Latest (recommended) [![npm latest version](https://img.shields.io/npm/v/levibos
 Beta: [![npm beta version](https://img.shields.io/npm/v/levibostian/cathy/beta.svg)][npm]
 Alpha: [![npm alpha version](https://img.shields.io/npm/v/levibostian/cathy/alpha.svg)][npm]
 
-[![codecov](https://codecov.io/gh/levibostian/cathy/branch/main/graph/badge.svg?token=BuKNhLezPs)](https://codecov.io/gh/levibostian/cathy)
-
 # cathy
 
-npm module to make comments on GitHub pull requests. 
+npm module to make comments on GitHub pull requests.
 
 # Goals of this project
 
-- Zero dependencies. This module is meant to be a dependency of your projects like GitHub Actions. Be small for quick install and security reasons. 
+- Minimal dependencies. This module is meant to be a dependency of your projects like GitHub Actions. Be small for quick install and security reasons.
 - Typescript and Javascript support with officially supported Typescript bindings.
 
 # Getting started
 
-* Install module in project:
+- Install module in project:
 
 ```
 npm install --save cathy
 ```
 
-* Authenticate with GitHub with a personal access token:
+- Authenticate with GitHub and make a comment!
 
 ```ts
 import cathy from "cathy"
 
-cathy.warmup({
-  githubToken: 'XXXXXXXXXXXXXX'
-})
-```
+cathy.speak("### 👋 Hello! 👋", {
+  // **Required** options parameters
+  //
+  // Personal access token for GitHub account you want to make comment for.
+  // Create token here: https://github.com/settings/tokens
+  githubToken: "XXXXXXXXXXXXXX",
+  // GitHub repository that we want to make the comment for.
+  githubRepo: "username/repo",
+  // Issue/pull request number to comment on.
+  githubIssue: 12,
 
-* Time to make a comment! 
-
-```ts
-// This is the shorthand way to make a comment using the default options. 
-cathy.speak('### 👋 Hello! 👋')
-```
-
-...or...use some of the options:
-
-```ts
-// Here are all of the function options that you may provide. 
-// Note: Option values below are the defaults. 
-cathy.speak('### 👋 Hello! 👋', {
+  // **Optional** parameters
   // Update existing comment you have sent on this pull request
   updateExisting: false,
-  // Identifier used for updating a comment. Cathy updates the existing comment with the provided ID. 
-  updateID: 'default'
+  // Identifier used for updating a comment. Cathy updates the existing comment with the provided ID.
+  // You only want to change this value if you are trying to use cathy to send multiple unique comments.
+  // Example: You use cathy on pull requests to print the status of test coverage *and* a website preview.
+  // You would set `updateID` to `testCoverage` and `websitePreview`. If you keep `default` for both,
+  // cathy would first comment on a PR for test coverage and then overwrite that comment with the website
+  // preview message. Therefore, you would never see the test coverage menu.
+  updateID: "default"
 })
 ```
 
@@ -71,6 +68,25 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-# Credits 
+# Contributing
 
-* Thank you to [this project](https://github.com/marocchino/sticky-pull-request-comment) for the inspiration behind this project. I loved the project, but wanted to add the functionality to my own GitHub Actions which was the original inspiration of this project. 
+## Development setup
+
+- `npm install`
+- Write your code.
+- Run tests to test your code works.
+
+## Run tests
+
+Tests for this project perform real HTTP requests against the GitHub API. Being a small project that doesn't require constant development, this is ok at this time to do.
+
+This means that in order to run tests on your local development environment, you need to follow these steps:
+
+- Create a personal GitHub access token that the tests will run against that user.
+- Create a `.env` file: `cp .env.example .env`
+- Modify `.env` with your own access tokens.
+- `npm test` to run tests.
+
+# Credits
+
+- Thank you to [this project](https://github.com/marocchino/sticky-pull-request-comment) for the inspiration behind this project. I loved the project, but wanted to add the functionality to my own GitHub Actions which was the original inspiration of this project.
