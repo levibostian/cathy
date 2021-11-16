@@ -1,8 +1,21 @@
+import { comment } from "./comment"
+
+export interface SpeakOptions {
+  githubToken: string
+  githubRepo: string
+  githubIssue: number
+  updateExisting: boolean
+  updateID: string
+}
+
 /**
- * Simple function that returns back "hello X"
- * @param text The text to combine with "hello"
- * @return combined text "hello {text}"
+ * Comment on pull request
+ * @param message The message of the comment
+ * @param options Options
+ * @return none
  */
-export const hello = (text: string): string => {
-  return `hello ${text}`
+export const speak = async (message: string, options: SpeakOptions): Promise<void> => {
+  if (!message) return
+
+  await comment(message, options)
 }

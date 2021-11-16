@@ -1,18 +1,10 @@
 name: Test
-# only run on PRs and when push a commit on a branch that we don't deploy on. 
-on: 
+on:  
   push:
-    # NOTE: We are enabling testing on all branches because we want codecov to generate a report on that branch so we have something to compare to. 
-    branches: 
-      - '*'
-    tags-ignore: # Don't run tests on tags as tags are made off of master branch. 
-      - '*'
-  pull_request: # Run on all PRs. 
-    branches:
-      - '*'
-
-env:
-  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    branches-ignore: [main, beta, alpha] # skip for deployment branches. 
+    tags-ignore: ['*']
+  pull_request:
+    branches: ['*']
 
 jobs:
   test:
@@ -22,6 +14,8 @@ jobs:
     if: ${{ !contains(format('{0} {1}', github.event.head_commit.message, github.event.pull_request.title), '[skip ci]') }}
     steps:
       - uses: actions/checkout@v2
+      - name: setup env 
+        run: echo "${{ secrets.DOT_ENV_BASE64 }}" | base64 -d > .env
       - name: Read .nvmrc
         run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
         id: nvm
@@ -34,4 +28,8 @@ jobs:
       - name: Test compile works 
         run: npm run compile 
       - name: Run tests 
-        run:  npm run test && npx codecov
+        run:  npm test 
+        
+      - name: cleanup 
+        if: always()
+        run: node scripts/cleanup_issue.js

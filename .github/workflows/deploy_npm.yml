@@ -1,10 +1,7 @@
 name: Deployment 
 on:
   push:
-    branches:
-      - main 
-      - beta
-      - alpha
+    branches: [main, beta, alpha]
 
 jobs:
   deploy:
@@ -23,8 +20,6 @@ jobs:
         run: npm ci 
       - name: Compile 
         run: npm run compile 
-      - name: Generate docs 
-        run: npm run docs 
       - name: Deploy via semantic release 
         uses: cycjimmy/semantic-release-action@v2
         with: 
