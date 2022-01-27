@@ -21,7 +21,7 @@ describe("comment", () => {
   it(`given non-unique comment id, expect update comment`, async () => {
     const updateId = uuid()
 
-    let actual = await comment(`AUTOMATED MESSAGE WITH UPDATE ID: ${updateId}`, {
+    let actual = await comment(`RANDOM AUTOMATED MESSAGE WITH UPDATE ID: ${updateId}\n\n${uuid()}`, {
       githubToken: githubAuthToken,
       githubRepo: repoSlug,
       githubIssue: 2,
@@ -31,7 +31,7 @@ describe("comment", () => {
 
     expect(actual.updatedPreviousComment).toBe(false)
 
-    actual = await comment(`AUTOMATED MESSAGE WITH UPDATE ID: ${updateId}`, {
+    actual = await comment(`RANDOM AUTOMATED MESSAGE WITH UPDATE ID: ${updateId}\n\n${uuid()}`, {
       githubToken: githubAuthToken,
       githubRepo: repoSlug,
       githubIssue: 2,
