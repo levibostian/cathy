@@ -20,7 +20,7 @@ export const comment = async (message: string, options: SpeakOptions): Promise<C
       options.githubToken,
       options.githubRepo,
       options.githubIssue,
-      message
+      messageHeader
     )
   }
 
