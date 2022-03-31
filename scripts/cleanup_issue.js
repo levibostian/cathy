@@ -5,8 +5,6 @@ const { paginateRest } = require("@octokit/plugin-paginate-rest")
 
 const MyOctokit = Octokit.plugin(paginateRest)
 
-require("dotenv").config({ path: path.join(__dirname, "../.env") })
-
 const octokit = new MyOctokit({ auth: process.env.GITHUB_TOKEN })
 
 async function asyncCall() {

@@ -85,9 +85,7 @@ Tests for this project perform real HTTP requests against the GitHub API. Being 
 This means that in order to run tests on your local development environment, you need to follow these steps:
 
 - Create a personal GitHub access token that the tests will run against that user.
-- Create a `.env` file: `cp .env.example .env`
-- Modify `.env` with your own access tokens.
-- `npm test` to run tests.
+- Run `GITHUB_TOKEN=XXX npm test`. Or, make a draft pull request to this repository and the tests will run automatically. 
 
 # Credits
 
