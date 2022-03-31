@@ -19,7 +19,12 @@ async function asyncCall() {
 
     for await (const comment of comments) {
       console.log(`Deleting comment: ${comment.id}`)
-      await octokit.request(`DELETE /repos/levibostian/cathy/issues/comments/${comment.id}`)
+      try {
+        await octokit.request(`DELETE /repos/levibostian/cathy/issues/comments/${comment.id}`)
+      } catch {        
+        // do not do anything if delete doesn't succeed. we only want to delete comments that 
+        // our bot made. 
+      }
     }
   }
 }
