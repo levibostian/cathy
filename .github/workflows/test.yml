@@ -19,7 +19,9 @@ jobs:
       - name: Test compile works 
         run: npm run compile 
       - name: Run tests 
-        run:  npm test
+        run:  npm test 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: cleanup 
         if: always()
