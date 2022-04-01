@@ -1,3 +1,10 @@
+### [1.0.2](https://github.com/levibostian/cathy/compare/1.0.1...1.0.2) (2022-04-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @octokit/core from 3.5.1 to 3.6.0 ([#24](https://github.com/levibostian/cathy/issues/24)) ([49fc0f8](https://github.com/levibostian/cathy/commit/49fc0f82356a9047e2fda1b294b72119142a5834))
+
 ## [1.0.1](https://github.com/levibostian/cathy/compare/1.0.0...1.0.1) (2022-01-27)
 
 
