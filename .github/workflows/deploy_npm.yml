@@ -6,6 +6,8 @@ on:
 jobs:
   deploy:
     name: Deploy to npm
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,17 +20,14 @@ jobs:
         run: npm run compile 
         
       - name: Deploy via semantic release 
-        uses: cycjimmy/semantic-release-action@v2
+        uses: cycjimmy/semantic-release-action@v4
         with: 
-          # version numbers below can be in many forms: M, M.m, M.m.p
-          semantic_version: 19
           extra_plugins: |
-            conventional-changelog-conventionalcommits@4
-            @semantic-release/changelog@6
-            @semantic-release/npm@9
-            @semantic-release/git@10
-            @semantic-release/github@8
+            conventional-changelog-conventionalcommits
+            @semantic-release/npm
+            @semantic-release/git
+            @semantic-release/github
         env:
-          GITHUB_TOKEN: ${{ secrets.BOT_PUSH_TOKEN }}        
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }} 
           
