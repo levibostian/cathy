@@ -20,8 +20,9 @@ jobs:
         run: npm run compile 
         
       - name: Deploy via semantic release 
-        uses: cycjimmy/semantic-release-action@v4
+        uses: cycjimmy/semantic-release-action@v4        
         with: 
+          semantic_version: latest
           extra_plugins: |
             conventional-changelog-conventionalcommits
             @semantic-release/npm
