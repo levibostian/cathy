@@ -1,4 +1,4 @@
-import { comment } from "./comment"
+import { comment, deleteComment } from "./comment"
 
 export interface SpeakOptions {
   githubToken: string
@@ -18,4 +18,18 @@ export const speak = async (message: string, options: SpeakOptions): Promise<voi
   if (!message) return
 
   await comment(message, options)
+}
+
+export interface RemoveOptions {
+  githubToken: string
+  githubRepo: string
+  githubIssue: number
+  updateID: string
+}
+
+/**
+ * Delete comment that may have been made by this action.
+ */
+export const remove = async (options: RemoveOptions): Promise<void> => {
+  await deleteComment(options)
 }

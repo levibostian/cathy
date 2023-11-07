@@ -1,9 +1,9 @@
 name: Test
 
-on: [push, pull_request]
+on: [pull_request]
 
 permissions:
-  issues: write
+  issues: write # create and delete comments 
 
 jobs:
   test:
@@ -26,3 +26,5 @@ jobs:
       - name: cleanup 
         if: always()
         run: node scripts/cleanup_issue.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

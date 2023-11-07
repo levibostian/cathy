@@ -1,7 +1,7 @@
 import { Octokit } from "@octokit/core"
 import { paginateRest } from "@octokit/plugin-paginate-rest"
 
-const MyOctokit = Octokit.plugin(paginateRest)
+const myOctokit = Octokit.plugin(paginateRest)
 
 interface IssueComment {
   id: number
@@ -14,7 +14,7 @@ export const findPreviousComment = async (
   issueNumber: number,
   commentContents: string
 ): Promise<number | undefined> => {
-  const octokit = new MyOctokit({ auth: githubToken })
+  const octokit = new myOctokit({ auth: githubToken })
 
   for await (const response of octokit.paginate.iterator(
     `GET /repos/${repoSlug}/issues/${issueNumber}/comments`,
@@ -43,7 +43,7 @@ export const makeComment = async (
   message: string,
   commentId?: number
 ): Promise<void> => {
-  const octokit = new MyOctokit({ auth: githubToken })
+  const octokit = new myOctokit({ auth: githubToken })
 
   if (commentId) {
     await octokit.request(`PATCH /repos/${repoSlug}/issues/comments/${commentId}`, {
@@ -54,6 +54,18 @@ export const makeComment = async (
       body: message
     })
   }
+
+  return
+}
+
+export const deleteComment = async (
+  githubToken: string,
+  repoSlug: string,
+  commentId: number
+): Promise<void> => {
+  const octokit = new myOctokit({ auth: githubToken })
+
+  await octokit.request(`DELETE /repos/${repoSlug}/issues/comments/${commentId}`)
 
   return
 }
