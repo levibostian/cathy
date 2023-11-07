@@ -1,5 +1,5 @@
-import { SpeakOptions } from "."
-import { findPreviousComment, makeComment } from "./github"
+import { SpeakOptions, RemoveOptions } from "."
+import { findPreviousComment, makeComment, deleteComment as deleteGitHubComment } from "./github"
 
 export const getMessageHeader = (updateId: string): string => {
   return `<!-- https://github.com/levibostian/cathy comment. id:${updateId} -->`
@@ -35,4 +35,24 @@ export const comment = async (message: string, options: SpeakOptions): Promise<C
   return {
     updatedPreviousComment: githubCommentId !== undefined
   }
+}
+
+export const deleteComment= async (options: RemoveOptions): Promise<void> => {
+  if (!options.updateID) options.updateID = "default"
+  const messageHeader = getMessageHeader(options.updateID)
+
+  const githubCommentId = await findPreviousComment(
+    options.githubToken,
+    options.githubRepo,
+    options.githubIssue,
+    messageHeader
+  )
+
+  if (!githubCommentId) return
+
+  await deleteGitHubComment(
+    options.githubToken,
+    options.githubRepo,
+    githubCommentId
+  )
 }
