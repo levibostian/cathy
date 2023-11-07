@@ -37,7 +37,7 @@ export const comment = async (message: string, options: SpeakOptions): Promise<C
   }
 }
 
-export const deleteComment= async (options: RemoveOptions): Promise<void> => {
+export const deleteComment = async (options: RemoveOptions): Promise<void> => {
   if (!options.updateID) options.updateID = "default"
   const messageHeader = getMessageHeader(options.updateID)
 
@@ -48,11 +48,7 @@ export const deleteComment= async (options: RemoveOptions): Promise<void> => {
     messageHeader
   )
 
-  if (!githubCommentId) return
+  if (!githubCommentId) return  
 
-  await deleteGitHubComment(
-    options.githubToken,
-    options.githubRepo,
-    githubCommentId
-  )
+  await deleteGitHubComment(options.githubToken, options.githubRepo, githubCommentId)
 }

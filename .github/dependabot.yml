@@ -3,8 +3,25 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    open-pull-requests-limit: 1
     commit-message:
-      prefix: "fix"
-      prefix-development: "chore"
+      prefix: "chore"
       include: "scope"
+    groups:
+      github-action-dependencies:
+        patterns:
+        - "*"
+  
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 1
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    groups:
+      github-action-dependencies:
+        patterns:
+        - "*"
