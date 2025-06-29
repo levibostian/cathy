@@ -17,7 +17,10 @@ describe("findPreviousComment", () => {
       "This issue will be auto-closed because there hasn't been any activity for a few months"
     )
 
-    expect(actual).toBe(900496146)
+    expect(actual).toEqual({
+      id: 900496146, 
+      body: "This issue will be auto-closed because there hasn't been any activity for a few months. Feel free to [open a new one](https://github.com/fastlane/fastlane/issues/new) if you still experience this problem :+1:"
+    })
   })
   it(`given issue that contains comment but does not start with given comment, expect false`, async () => {
     const actual = await github.findPreviousComment(

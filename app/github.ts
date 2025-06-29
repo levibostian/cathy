@@ -1,8 +1,8 @@
 import https from "https"
 
-interface IssueComment {
+export interface IssueComment {
   id: number
-  body: string
+  body: string // the message 
 }
 
 function githubRequest<T>(
@@ -54,7 +54,7 @@ export const findPreviousComment = async (
   repoSlug: string,
   issueNumber: number,
   commentContents: string
-): Promise<number | undefined> => {
+): Promise<IssueComment | undefined> => {
   let page = 1
   const PER_PAGE = 100
   // eslint-disable-next-line no-constant-condition
@@ -64,10 +64,12 @@ export const findPreviousComment = async (
     const comments = await githubRequest<IssueComment[]>("GET", path, githubToken)
     if (!comments || comments.length === 0) break
     for (const commentJson of comments) {
-      const comment = commentJson.body
-      const commentId = commentJson.id
+      const comment = commentJson.body      
       if (comment.startsWith(commentContents)) {
-        return commentId
+        return {
+          id: commentJson.id,
+          body: commentJson.body
+        }
       }
     }
     if (comments.length < PER_PAGE) break
@@ -81,10 +83,10 @@ export const makeComment = async (
   repoSlug: string,
   issueNumber: number,
   message: string,
-  commentId?: number
+  comment?: IssueComment
 ): Promise<void> => {
-  if (commentId) {
-    const path = `/repos/${repoSlug}/issues/comments/${commentId}`
+  if (comment) {
+    const path = `/repos/${repoSlug}/issues/comments/${comment.id}`
     await githubRequest("PATCH", path, githubToken, { body: message })
   } else {
     const path = `/repos/${repoSlug}/issues/${issueNumber}/comments`
