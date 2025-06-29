@@ -4,8 +4,9 @@ export interface SpeakOptions {
   githubToken: string
   githubRepo: string
   githubIssue: number
-  updateExisting: boolean
-  updateID: string
+  updateExisting?: boolean
+  appendToExisting?: boolean
+  updateID?: string  
 }
 
 /**

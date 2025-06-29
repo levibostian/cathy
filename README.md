@@ -42,6 +42,8 @@ cathy.speak("### 👋 Hello! 👋", {
   // **Optional** parameters
   // Update existing comment you have sent on this pull request
   updateExisting: false,
+  // Instead of overwriting an existing comment, append to the existing comment.
+  appendToExisting: false,  
   // Identifier used for updating a comment. Cathy updates the existing comment with the provided ID.
   // You only want to change this value if you are trying to use cathy to send multiple unique comments.
   // Example: You use cathy on pull requests to print the status of test coverage *and* a website preview.
