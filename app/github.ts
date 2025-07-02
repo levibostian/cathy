@@ -49,11 +49,17 @@ function githubRequest<T>(
   })
 }
 
+/**
+ * Finds a previous comment on a GitHub issue that contains the specified contents.
+ * It's suggested to use [getMessageHeader] to generate the comment contents.
+ */
 export const findPreviousComment = async (
   githubToken: string,
   repoSlug: string,
   issueNumber: number,
-  commentContents: string
+  commentContents: string,
+  // Optional callback to handle found comments. return true to keep searching, false to stop.
+  onFoundComment?: (comment: IssueComment) => boolean
 ): Promise<IssueComment | undefined> => {
   let page = 1
   const PER_PAGE = 100
@@ -65,10 +71,17 @@ export const findPreviousComment = async (
     if (!comments || comments.length === 0) break
     for (const commentJson of comments) {
       const comment = commentJson.body      
-      if (comment.startsWith(commentContents)) {
-        return {
+      if (comment.includes(commentContents)) {
+        const issueComment: IssueComment = {
           id: commentJson.id,
           body: commentJson.body
+        }
+
+        if (onFoundComment) {
+          const shouldKeepSearching = onFoundComment(issueComment)
+          if (!shouldKeepSearching) return issueComment
+        } else {
+          return issueComment // If no callback is provided, return the first found comment
         }
       }
     }
@@ -76,6 +89,22 @@ export const findPreviousComment = async (
     page++
   }
   return undefined
+}
+
+// Like findPreviousComment, but returns all comments that match the contents. 
+// mostly used for testing purposes. The tool is meant to find first comment that matches the contents.
+export const findPreviousComments = async (
+  githubToken: string,
+  repoSlug: string,
+  issueNumber: number,
+  commentContents: string
+): Promise<IssueComment[]> => {
+  const comments: IssueComment[] = []
+  await findPreviousComment(githubToken, repoSlug, issueNumber, commentContents, comment => {
+    comments.push(comment)
+    return true // Keep searching
+  })
+  return comments
 }
 
 export const makeComment = async (

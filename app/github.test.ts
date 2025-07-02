@@ -9,7 +9,7 @@ describe("findPreviousComment", () => {
 
     expect(actual).toBeUndefined()
   })
-  it(`given issue with given comment, expect comment id`, async () => {
+  it(`given issue comment that starts with given input, expect comment id`, async () => {
     const actual = await github.findPreviousComment(
       githubAuthToken,
       repoSlug,
@@ -22,14 +22,17 @@ describe("findPreviousComment", () => {
       body: "This issue will be auto-closed because there hasn't been any activity for a few months. Feel free to [open a new one](https://github.com/fastlane/fastlane/issues/new) if you still experience this problem :+1:"
     })
   })
-  it(`given issue that contains comment but does not start with given comment, expect false`, async () => {
+  it(`given issue comment that contains given input, expect comment id`, async () => {
     const actual = await github.findPreviousComment(
       githubAuthToken,
       repoSlug,
       18750,
-      "Feel free to open a new one if you still experience this problem"
+      "Feel free to [open a new one](https://github.com/fastlane/fastlane/issues/new)"
     )
 
-    expect(actual).toBeUndefined()
+    expect(actual).toEqual({
+      id: 900496146, 
+      body: "This issue will be auto-closed because there hasn't been any activity for a few months. Feel free to [open a new one](https://github.com/fastlane/fastlane/issues/new) if you still experience this problem :+1:"
+    })
   })
 })

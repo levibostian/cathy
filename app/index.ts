@@ -6,7 +6,7 @@ export interface SpeakOptions {
   githubIssue: number
   updateExisting?: boolean
   appendToExisting?: boolean
-  updateID?: string  
+  updateID?: string | string[]
 }
 
 /**
