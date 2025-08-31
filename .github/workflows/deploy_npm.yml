@@ -1,34 +1,30 @@
 name: Deployment 
+
 on:
+  pull_request:    
   push:
-    branches: [main, beta, alpha]
+    branches: [main]
 
 jobs:
   deploy:
     name: Deploy to npm
     permissions:
-      contents: write
+      contents: write # decaf to push tags 
+      pull-requests: write # decaf to make comments on PRs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-      - run: npm ci 
 
-      - name: Compile 
-        run: npm run compile 
-        
-      - name: Deploy via semantic release 
-        uses: cycjimmy/semantic-release-action@v4        
-        with: 
-          semantic_version: latest
-          extra_plugins: |
-            conventional-changelog-conventionalcommits
-            @semantic-release/npm
-            @semantic-release/git
-            @semantic-release/github
+      - uses: levibostian/decaf@0.3.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+          GH_TOKEN: ${{ github.token }} # required for gh cli to work 
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }} 
-          
+        with:          
+          simulated_merge_type: rebase
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          get_latest_release_current_branch: ./scripts/get_latest_release.ts
+          get_next_release_version: ./scripts/get_next_release.ts
+          deploy: ./scripts/deploy.ts
