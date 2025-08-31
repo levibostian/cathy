@@ -2,10 +2,6 @@
 
 Latest (recommended) [![npm latest version](https://img.shields.io/npm/v/cathy/latest.svg)][npm]  
 
-Beta: [![npm beta version](https://img.shields.io/npm/v/cathy/beta.svg)][npm]  
-
-Alpha: [![npm alpha version](https://img.shields.io/npm/v/cathy/alpha.svg)][npm]  
-
 # cathy
 
 npm module to make comments on GitHub pull requests.
