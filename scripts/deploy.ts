@@ -26,7 +26,11 @@ if (input.testMode) {
   argsToPushToNpm.push(`--dry-run`)
 } 
 
-await $`npm ${argsToPushToNpm}`.printCommand()
+if ((await $`npx is-it-deployed --package-manager npm --package-name cathy --package-version ${input.nextVersionName}`.noThrow()).code === 0) {
+  console.log(`npm package ${input.nextVersionName} is already deployed. Skipping pushing to npm`)  
+} else {
+  await $`npm ${argsToPushToNpm}`.printCommand()
+}
 
 const argsToCreateGithubRelease = [
   `release`,
