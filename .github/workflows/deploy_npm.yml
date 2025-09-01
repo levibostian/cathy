@@ -32,3 +32,10 @@ jobs:
           get_latest_release_current_branch: ./scripts/get_latest_release.ts
           get_next_release_version: ./scripts/get_next_release.ts
           deploy: ./scripts/deploy.ts
+          debug_file: /tmp/decaf.log
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: decaf-debug-log
+          path: /tmp/decaf.log
