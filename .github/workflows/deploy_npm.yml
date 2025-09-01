@@ -22,11 +22,12 @@ jobs:
         with:
           deno-version: '2.x'
 
-      - uses: levibostian/decaf@0.3.0
+      - uses: levibostian/decaf@fix-main-branch-not-included
         env:
           GH_TOKEN: ${{ github.token }} # required for gh cli to work 
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }} 
-        with:          
+        with:   
+          compile_binary: true 
           simulated_merge_type: rebase
           github_token: ${{ secrets.GITHUB_TOKEN }}
           get_latest_release_current_branch: ./scripts/get_latest_release.ts
