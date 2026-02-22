@@ -1,7 +1,8 @@
 {
-  "extends": "@levibostian/tsconfigs/node14-npm/tsconfig.json",
+  "extends": "@tsconfig/node24/tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
+    "isolatedModules": true,
     "paths": {
       "*": ["node_modules/*", "@types/*"]
     },

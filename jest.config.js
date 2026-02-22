@@ -5,5 +5,10 @@ const customPreset = require("@levibostian/jest-config/jest-preset")
 
 module.exports = {
   ...tsPreset,
-  ...customPreset
+  ...customPreset,
+  transformIgnorePatterns: ["/node_modules/(?!(uuid)/)"],
+  transform: {
+    ...tsPreset.transform,
+    "^.+\\.jsx?$": ["ts-jest", { diagnostics: false }]
+  }
 }
