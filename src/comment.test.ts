@@ -11,6 +11,12 @@ import { getMessageHeader } from "./comment.ts"
  * In-memory "GitHub" store used to simulate the GitHub comment API without any
  * real HTTP calls.  Keeps a map of issueNumber -> comments and auto-increments
  * comment IDs.
+ *
+ * COUPLING WARNING: The regex patterns in `requester` below mirror the URL paths
+ * constructed in `github.ts` (findPreviousComment, makeComment, deleteComment).
+ * If any URL path format changes in github.ts, the corresponding regex here must
+ * be updated to match, otherwise the mock will silently return `undefined` and
+ * tests will pass incorrectly.
  */
 class MockGitHub {
   private comments: Map<number, IssueComment[]> = new Map()
@@ -370,6 +376,29 @@ Deno.test(
     assertEquals(stored[0].body.includes(getMessageHeader("id-alpha")), true)
     assertEquals(stored[0].body.includes(getMessageHeader("id-beta")), true)
     assertEquals(stored[0].body.includes("Multi-id message"), true)
+  },
+)
+
+Deno.test(
+  "comment: updateID array with empty-string entries skips those entries",
+  async () => {
+    const mock = new MockGitHub()
+    const client = createCommentClient(mock.requester)
+
+    // Pass an array where some entries are blank; only "real-id" should appear as a header
+    await client.comment("Message with blank IDs", {
+      githubToken: TOKEN,
+      githubRepo: REPO,
+      githubIssue: ISSUE,
+      updateID: ["", "real-id", "  "],
+    })
+
+    const stored = mock.getComments(ISSUE)
+    assertEquals(stored.length, 1)
+    assertEquals(stored[0].body.includes(getMessageHeader("real-id")), true)
+    // Blank entries must not generate headers
+    assertEquals(stored[0].body.includes(getMessageHeader("")), false)
+    assertEquals(stored[0].body.includes(getMessageHeader("  ")), false)
   },
 )
 

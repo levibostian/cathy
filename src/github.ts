@@ -123,6 +123,10 @@ export function createGitHubClient(
    * @param issueNumber - Issue or pull request number
    * @param commentContents - String to search for in existing comments
    * @param onFoundComment - Optional callback; return true to keep searching, false to stop
+   *
+   * NOTE: The URL paths constructed below are mirrored by regex patterns in MockGitHub
+   * (comment.test.ts). If you change any path format here, update the corresponding
+   * regex in MockGitHub.requester to match.
    */
   const findPreviousComment = async (
     githubToken: string,
@@ -192,6 +196,10 @@ export function createGitHubClient(
 
   /**
    * Creates a new comment, or updates an existing one (via PATCH) if `existingComment` is provided.
+   *
+   * NOTE: The URL paths constructed below are mirrored by regex patterns in MockGitHub
+   * (comment.test.ts). If you change any path format here, update the corresponding
+   * regex in MockGitHub.requester to match.
    */
   const makeComment = async (
     githubToken: string,
@@ -211,6 +219,10 @@ export function createGitHubClient(
 
   /**
    * Deletes a comment by its numeric ID.
+   *
+   * NOTE: The URL path constructed below is mirrored by a regex pattern in MockGitHub
+   * (comment.test.ts). If you change the path format here, update the corresponding
+   * regex in MockGitHub.requester to match.
    */
   const deleteComment = async (
     githubToken: string,

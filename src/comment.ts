@@ -78,9 +78,11 @@ export function createCommentClient(request?: HttpRequester) {
       message = `${githubComment.body}\n\n${message}`
     }
 
-    // Prepend all update-ID headers to the message
+    // Prepend all update-ID headers to the message (skip blank entries)
     for (const _updateID of updateId) {
-      const messageHeader = getMessageHeader(_updateID)
+      const trimmed = _updateID.trim()
+      if (!trimmed || trimmed === "") continue
+      const messageHeader = getMessageHeader(trimmed)
       message = `${messageHeader}\n${message}`
     }
 

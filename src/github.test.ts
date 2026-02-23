@@ -262,6 +262,74 @@ Deno.test(
   },
 )
 
+Deno.test(
+  "findPreviousComment: paginates when first page is full (100 comments), finds match on second page",
+  async () => {
+    const PER_PAGE = 100
+    // Build a full first page of non-matching comments
+    const page1 = Array.from(
+      { length: PER_PAGE },
+      (_, i) => makeGitHubCommentResponse(i + 1, `unrelated comment ${i + 1}`),
+    )
+    // Second page has the matching comment
+    const page2 = [makeGitHubCommentResponse(200, "needle in the haystack")]
+
+    const responses = new Map<string, unknown>([
+      [
+        `/repos/owner/repo/issues/1/comments?per_page=${PER_PAGE}&page=1`,
+        page1,
+      ],
+      [
+        `/repos/owner/repo/issues/1/comments?per_page=${PER_PAGE}&page=2`,
+        page2,
+      ],
+    ])
+    const client = createGitHubClient(makeMockRequester(responses))
+
+    const result = await client.findPreviousComment(
+      "token",
+      "owner/repo",
+      1,
+      "needle in the haystack",
+    )
+
+    assertEquals(result, { id: 200, body: "needle in the haystack" })
+  },
+)
+
+Deno.test(
+  "findPreviousComment: stops paginating when page returns fewer than 100 comments and no match found",
+  async () => {
+    const PER_PAGE = 100
+    const page1 = Array.from({ length: PER_PAGE }, (_, i) => makeGitHubCommentResponse(i + 1, `unrelated ${i + 1}`))
+    const page2 = [makeGitHubCommentResponse(200, "still unrelated")]
+
+    const responses = new Map<string, unknown>([
+      [
+        `/repos/owner/repo/issues/1/comments?per_page=${PER_PAGE}&page=1`,
+        page1,
+      ],
+      [
+        `/repos/owner/repo/issues/1/comments?per_page=${PER_PAGE}&page=2`,
+        page2,
+      ],
+    ])
+    const calls: RecordedCall[] = []
+    const client = createGitHubClient(makeMockRequester(responses, calls))
+
+    const result = await client.findPreviousComment(
+      "token",
+      "owner/repo",
+      1,
+      "needle",
+    )
+
+    assertEquals(result, undefined)
+    // Should have fetched page 1 and page 2, then stopped (page 2 had < 100 results)
+    assertEquals(calls.length, 2)
+  },
+)
+
 // ---------------------------------------------------------------------------
 // findPreviousComments
 // ---------------------------------------------------------------------------
