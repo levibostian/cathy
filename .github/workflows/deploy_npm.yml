@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy 
+    name: Deploy
     permissions:
       contents: write # If your deploy script that you write needs to push a git commit, git tag, or create a GitHub Release.
       pull-requests: write # If you enable pull request comments (they are enabled by default).

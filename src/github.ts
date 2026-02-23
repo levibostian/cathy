@@ -42,7 +42,9 @@ export function defaultHttpRequester<T>(
     const bodyStr = body ? JSON.stringify(body) : undefined
     if (bodyStr) {
       headers["Content-Type"] = "application/json"
-      headers["Content-Length"] = String(new TextEncoder().encode(bodyStr).length)
+      headers["Content-Length"] = String(
+        new TextEncoder().encode(bodyStr).length,
+      )
     }
 
     const options: https.RequestOptions = {
@@ -81,7 +83,37 @@ export function defaultHttpRequester<T>(
  * Creates a GitHub API client bound to the provided HTTP requester.
  * Pass a custom requester to mock HTTP calls in tests.
  */
-export function createGitHubClient(request: HttpRequester = defaultHttpRequester) {
+export interface GitHubClient {
+  findPreviousComment: (
+    githubToken: string,
+    repoSlug: string,
+    issueNumber: number,
+    commentContents: string,
+    onFoundComment?: (comment: IssueComment) => boolean,
+  ) => Promise<IssueComment | undefined>
+  findPreviousComments: (
+    githubToken: string,
+    repoSlug: string,
+    issueNumber: number,
+    commentContents: string,
+  ) => Promise<IssueComment[]>
+  makeComment: (
+    githubToken: string,
+    repoSlug: string,
+    issueNumber: number,
+    message: string,
+    existingComment?: IssueComment,
+  ) => Promise<void>
+  deleteComment: (
+    githubToken: string,
+    repoSlug: string,
+    commentId: number,
+  ) => Promise<void>
+}
+
+export function createGitHubClient(
+  request: HttpRequester = defaultHttpRequester,
+): GitHubClient {
   /**
    * Finds a previous comment on a GitHub issue that contains the specified contents.
    * It's suggested to use {@link getMessageHeader} to generate the comment contents.
@@ -105,7 +137,11 @@ export function createGitHubClient(request: HttpRequester = defaultHttpRequester
     while (true) {
       const path = `/repos/${repoSlug}/issues/${issueNumber}/comments?per_page=${PER_PAGE}&page=${page}`
       // deno-lint-ignore no-await-in-loop
-      const comments = await request<GitHubCommentResponse[]>("GET", path, githubToken)
+      const comments = await request<GitHubCommentResponse[]>(
+        "GET",
+        path,
+        githubToken,
+      )
       if (!comments || comments.length === 0) break
 
       for (const commentJson of comments) {
@@ -141,10 +177,16 @@ export function createGitHubClient(request: HttpRequester = defaultHttpRequester
     commentContents: string,
   ): Promise<IssueComment[]> => {
     const found: IssueComment[] = []
-    await findPreviousComment(githubToken, repoSlug, issueNumber, commentContents, (c) => {
-      found.push(c)
-      return true // keep searching
-    })
+    await findPreviousComment(
+      githubToken,
+      repoSlug,
+      issueNumber,
+      commentContents,
+      (c) => {
+        found.push(c)
+        return true // keep searching
+      },
+    )
     return found
   }
 
@@ -179,11 +221,16 @@ export function createGitHubClient(request: HttpRequester = defaultHttpRequester
     await request("DELETE", path, githubToken)
   }
 
-  return { findPreviousComment, findPreviousComments, makeComment, deleteComment }
+  return {
+    findPreviousComment,
+    findPreviousComments,
+    makeComment,
+    deleteComment,
+  }
 }
 
 // Default client instance using the real HTTP requester
-const defaultClient = createGitHubClient()
+const defaultClient: GitHubClient = createGitHubClient()
 
 export const findPreviousComment = defaultClient.findPreviousComment
 export const findPreviousComments = defaultClient.findPreviousComments
