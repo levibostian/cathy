@@ -1,28 +1,29 @@
-[npm]: https://www.npmjs.com/package/cathy
-
-Latest (recommended) [![npm latest version](https://img.shields.io/npm/v/cathy/latest.svg)][npm]  
-
 # cathy
 
-npm module to make comments on GitHub pull requests.
+npm/Deno module to make comments on GitHub pull requests.
 
 # Goals of this project
 
-- Minimal dependencies. This module is meant to be a dependency of your projects like GitHub Actions. Be small for quick install and security reasons.
+- Zero dependencies. This module is meant to be a dependency of your projects like GitHub Actions. Be small for quick install and security reasons.
 - Typescript and Javascript support with officially supported Typescript bindings.
 
 # Getting started
 
 - Install module in project:
 
+```bash 
+# Deno: 
+deno add jsr:@levibostian/cathy
+# npm/node: 
+npx jsr add @levibostian/cathy
 ```
-npm install --save cathy
-```
+
+> Note: v1 of cathy is published on npmjs while v2+ is published on jsr.io
 
 - Authenticate with GitHub and make a comment!
 
 ```ts
-import cathy from "cathy"
+import cathy from "@levibostian/cathy"
 
 cathy.speak("### 👋 Hello! 👋", {
   // **Required** options parameters
@@ -65,41 +66,6 @@ cathy.speak("### 👋 Hello! 👋", {
 ```
 
 Notice how one of the values identifies the type of message (reporting test coverage) and the other identifies the CI run that changes with each CI run. By using this strategy, we will append to the comment if the dynamic value is found and will overwrite the comment if the static value is found.
-
-## Contributors
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key))
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/levibostian"><img src="https://avatars1.githubusercontent.com/u/2041082?v=4" width="100px;" alt=""/><br /><sub><b>Levi Bostian</b></sub></a><br /><a href="https://github.com/levibostian/cathy/commits?author=levibostian" title="Code">💻</a> <a href="https://github.com/levibostian/cathy/commits?author=levibostian" title="Documentation">📖</a> <a href="#maintenance-levibostian" title="Maintenance">🚧</a></td>
-  </tr>
-</table>
-
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-# Contributing
-
-## Development setup
-
-- `npm install`
-- Write your code.
-- Run tests to test your code works.
-
-## Run tests
-
-Tests for this project perform real HTTP requests against the GitHub API. Being a small project that doesn't require constant development, this is ok at this time to do.
-
-This means that in order to run tests on your local development environment, you need to follow these steps:
-
-- Create a personal GitHub access token that the tests will run against that user.
-- Run `GITHUB_TOKEN=XXX npm test`. Or, make a draft pull request to this repository and the tests will run automatically. 
 
 # Credits
 

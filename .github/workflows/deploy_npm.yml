@@ -1,36 +1,32 @@
-name: Deployment 
+name: Deployment
 
 on:
-  pull_request:    
+  pull_request:
   push:
     branches: [main]
 
 jobs:
   deploy:
-    name: Deploy to npm
+    name: Deploy 
     permissions:
       contents: write # If your deploy script that you write needs to push a git commit, git tag, or create a GitHub Release.
       pull-requests: write # If you enable pull request comments (they are enabled by default).
-      id-token: write # required by jsr and npm for publishing package 
+      id-token: write # required by jsr and npm for publishing package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
       - uses: denoland/setup-deno@v1
         with:
-          deno-version: '2.x'
+          deno-version: "2.x"
 
       - uses: levibostian/decaf@0.11.0
         env:
-          # required to use 'gh' CLI in my step scripts. 
-          GH_TOKEN: ${{ github.token }}      
+          # required to use 'gh' CLI in my step scripts.
+          GH_TOKEN: ${{ github.token }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           get_latest_release_current_branch: deno run --allow-all --quiet jsr:@levibostian/decaf-script-github-releases get
           get_next_release_version: deno run --allow-all --quiet jsr:@levibostian/decaf-script-conventional-commits
           deploy: |
-            deno run --allow-all --quiet jsr:@levibostian/decaf-script-npm
-            deno run --allow-all --quiet jsr:@levibostian/decaf-script-github-releases set 
+            deno run --allow-all --quiet jsr:@levibostian/decaf-script-jsr
+            deno run --allow-all --quiet jsr:@levibostian/decaf-script-github-releases set
