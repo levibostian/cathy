@@ -1,0 +1,10 @@
+pre-commit:
+  commands:
+    deno_fmt:
+      run: deno run fmt
+      glob: '{*.ts,**/*.ts}'
+      stage_fixed: true # Stage files that were fixed
+    deno_lint:
+      run: deno run lint
+      glob: '{*.ts,**/*.ts}'
+      stage_fixed: true # Stage files that were fixed
