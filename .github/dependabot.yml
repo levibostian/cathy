@@ -11,8 +11,8 @@ updates:
     groups:
       github-action-dependencies:
         patterns:
-        - "*"
-  
+          - "*"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -24,4 +24,4 @@ updates:
     groups:
       github-action-dependencies:
         patterns:
-        - "*"
+          - "*"
