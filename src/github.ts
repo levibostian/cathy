@@ -1,5 +1,3 @@
-import https from "node:https"
-
 export interface IssueComment {
   id: number
   body: string // the message
@@ -24,59 +22,39 @@ export type HttpRequester = <T>(
 ) => Promise<T>
 
 /**
- * Default HTTP requester using Node's built-in `https` module.
+ * Default HTTP requester using the global `fetch` API.
+ * Works on Deno, Bun, and Node.js 18+.
  */
-export function defaultHttpRequester<T>(
+export async function defaultHttpRequester<T>(
   method: string,
   path: string,
   githubToken: string,
   body?: Record<string, unknown>,
 ): Promise<T> {
-  return new Promise((resolve, reject) => {
-    const headers: Record<string, string> = {
-      "User-Agent": "cathy-npm-module",
-      Authorization: `Bearer ${githubToken}`,
-      Accept: "application/vnd.github+json",
-    }
+  const headers: Record<string, string> = {
+    "User-Agent": "cathy-npm-module",
+    Authorization: `Bearer ${githubToken}`,
+    Accept: "application/vnd.github+json",
+  }
 
-    const bodyStr = body ? JSON.stringify(body) : undefined
-    if (bodyStr) {
-      headers["Content-Type"] = "application/json"
-      headers["Content-Length"] = String(
-        new TextEncoder().encode(bodyStr).length,
-      )
-    }
+  const bodyStr = body ? JSON.stringify(body) : undefined
+  if (bodyStr) {
+    headers["Content-Type"] = "application/json"
+  }
 
-    const options: https.RequestOptions = {
-      hostname: "api.github.com",
-      path,
-      method,
-      headers,
-    }
-
-    let data = ""
-    const req = https.request(options, (res) => {
-      res.on("data", (chunk) => {
-        data += chunk
-      })
-      res.on("end", () => {
-        if (res.statusCode && res.statusCode >= 400) {
-          reject(new Error(`GitHub API error: ${res.statusCode} ${data}`))
-        } else {
-          try {
-            resolve(data ? (JSON.parse(data) as T) : (undefined as T))
-          } catch (e) {
-            reject(e)
-          }
-        }
-      })
-    })
-    req.on("error", reject)
-    if (bodyStr) {
-      req.write(bodyStr)
-    }
-    req.end()
+  const response = await fetch(`https://api.github.com${path}`, {
+    method,
+    headers,
+    body: bodyStr,
   })
+
+  if (response.status >= 400) {
+    const text = await response.text()
+    throw new Error(`GitHub API error: ${response.status} ${text}`)
+  }
+
+  const text = await response.text()
+  return (text ? JSON.parse(text) : undefined) as T
 }
 
 /**
