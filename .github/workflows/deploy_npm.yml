@@ -19,7 +19,7 @@ jobs:
         with:
           deno-version: "2.x"
 
-      - uses: levibostian/decaf@0.11.0
+      - uses: levibostian/decaf@0.11.1
         env:
           # required to use 'gh' CLI in my step scripts.
           GH_TOKEN: ${{ github.token }}
